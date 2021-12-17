@@ -43,19 +43,28 @@ void *Proxy::handleNewServerConnection(void *arg) {
 
         activeServersConnections.lock();
         {
-            if ((*serverConnection)->isCachingAnswerReceived()) {
+            if ((*serverConnection)->getState() != ServerConnectionState::CONNECTION_ERROR
+                    && (*serverConnection)->isCachingAnswerReceived()) {
                 cacheStorage.lock();
                 {
-
+                    cacheStorage.addCacheEntry((*serverConnection)->getRequestUrl(),
+                                               (*serverConnection)->getServerAnswerBuffer());
                 }
                 cacheStorage.unlock();
             }
+            activeServersConnections.removeActiveServerConnectionFor((*serverConnection)->getRequestUrl());
         }
         activeServersConnections.unlock();
-
-        (*serverConnection)->close();
+    } else {
+        (*serverConnection)->handleConnectionError();
+        activeServersConnections.lock();
+        {
+            activeServersConnections.removeActiveServerConnectionFor((*serverConnection)->getRequestUrl());
+        }
+        activeServersConnections.unlock();
     }
 
+    (*serverConnection)->close();
     pthread_exit(reinterpret_cast<void *>(EXIT_SUCCESS));
 }
 

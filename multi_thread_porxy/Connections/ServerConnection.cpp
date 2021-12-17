@@ -86,3 +86,17 @@ void ServerConnection::receiveAnswer() {
     }
     serverAnswerBuffer->unlock();
 }
+
+void ServerConnection::handleConnectionError() {
+    serverAnswerBuffer->lock();
+    {
+        serverAnswerBuffer->getData()->clear();
+        serverAnswerBuffer->getData()->insert(serverAnswerBuffer->getData()->end(),
+                                              ERROR_MESSAGE_500.begin(),
+                                              ERROR_MESSAGE_500.end());
+        serverAnswerBuffer->setReadyState(true);
+        serverAnswerBuffer->notifyHolders();
+        // TODO
+    }
+    serverAnswerBuffer->unlock();
+}

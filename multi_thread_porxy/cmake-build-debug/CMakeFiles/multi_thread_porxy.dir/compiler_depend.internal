@@ -195,6 +195,8 @@ CMakeFiles/multi_thread_porxy.dir/Connections/ClientConnection.cpp.o
  /usr/include/c++/11.1.0/bits/istream.tcc
  /home/yevsyukof/CLionProjects/multi_thread_porxy/Connections/ClientConnection.h
  /home/yevsyukof/CLionProjects/multi_thread_porxy/Connections/Connection.h
+ /usr/include/c++/11.1.0/utility
+ /usr/include/c++/11.1.0/bits/stl_relops.h
  /usr/include/c++/11.1.0/vector
  /usr/include/c++/11.1.0/bits/stl_uninitialized.h
  /usr/include/c++/11.1.0/bits/stl_vector.h
@@ -206,8 +208,6 @@ CMakeFiles/multi_thread_porxy.dir/Connections/ClientConnection.cpp.o
  /usr/include/c++/11.1.0/bit
  /usr/include/c++/11.1.0/bits/uses_allocator.h
  /usr/include/c++/11.1.0/bits/unique_ptr.h
- /usr/include/c++/11.1.0/utility
- /usr/include/c++/11.1.0/bits/stl_relops.h
  /usr/include/c++/11.1.0/tuple
  /usr/include/c++/11.1.0/array
  /usr/include/c++/11.1.0/bits/invoke.h
@@ -562,6 +562,7 @@ CMakeFiles/multi_thread_porxy.dir/Connections/ServerConnection.cpp.o
  /usr/include/c++/11.1.0/pstl/glue_memory_defs.h
  /usr/include/c++/11.1.0/pstl/execution_defs.h
  /home/yevsyukof/CLionProjects/multi_thread_porxy/Cache/Buffer.h
+ /home/yevsyukof/CLionProjects/multi_thread_porxy/Constants.h
  /home/yevsyukof/CLionProjects/multi_thread_porxy/Cache/CacheEntry.h
  /home/yevsyukof/CLionProjects/multi_thread_porxy/Cache/Buffer.h
  /home/yevsyukof/CLionProjects/multi_thread_porxy/HttpParser/httpresponseparser.h
@@ -902,6 +903,7 @@ CMakeFiles/multi_thread_porxy.dir/Proxy.cpp.o
  /usr/include/c++/11.1.0/bits/sstream.tcc
  /home/yevsyukof/CLionProjects/multi_thread_porxy/HttpParser/request.h
  /home/yevsyukof/CLionProjects/multi_thread_porxy/Connections/ServerConnection.h
+ /home/yevsyukof/CLionProjects/multi_thread_porxy/Constants.h
  /home/yevsyukof/CLionProjects/multi_thread_porxy/Cache/CacheEntry.h
  /home/yevsyukof/CLionProjects/multi_thread_porxy/utils/WaitersMap.h
  /home/yevsyukof/CLionProjects/multi_thread_porxy/Connections/ClientConnection.h
@@ -1244,6 +1246,7 @@ CMakeFiles/multi_thread_porxy.dir/main.cpp.o
  /usr/include/c++/11.1.0/bits/sstream.tcc
  /home/yevsyukof/CLionProjects/multi_thread_porxy/HttpParser/request.h
  /home/yevsyukof/CLionProjects/multi_thread_porxy/Connections/ServerConnection.h
+ /home/yevsyukof/CLionProjects/multi_thread_porxy/Constants.h
  /home/yevsyukof/CLionProjects/multi_thread_porxy/Cache/CacheEntry.h
  /home/yevsyukof/CLionProjects/multi_thread_porxy/utils/WaitersMap.h
  /home/yevsyukof/CLionProjects/multi_thread_porxy/Connections/ClientConnection.h

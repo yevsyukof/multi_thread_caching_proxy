@@ -2,6 +2,7 @@
 #define SINGLE_THREAD_PORXY_SERVERCONNECTION_H
 
 #include "Connection.h"
+#include "/home/yevsyukof/CLionProjects/multi_thread_porxy/Constants.h"
 #include "/home/yevsyukof/CLionProjects/multi_thread_porxy/Cache/CacheEntry.h"
 
 enum class ServerConnectionState {
@@ -28,6 +29,8 @@ public:
     }
 
     void sendRequest();
+
+    void handleConnectionError();
 
     void receiveAnswer();
 

@@ -141,7 +141,8 @@ CMakeFiles/multi_thread_porxy.dir/Connections/ClientConnection.cpp.o: \
  /usr/include/c++/11.1.0/bits/istream.tcc \
  /home/yevsyukof/CLionProjects/multi_thread_porxy/Connections/ClientConnection.h \
  /home/yevsyukof/CLionProjects/multi_thread_porxy/Connections/Connection.h \
- /usr/include/c++/11.1.0/vector \
+ /usr/include/c++/11.1.0/utility \
+ /usr/include/c++/11.1.0/bits/stl_relops.h /usr/include/c++/11.1.0/vector \
  /usr/include/c++/11.1.0/bits/stl_uninitialized.h \
  /usr/include/c++/11.1.0/bits/stl_vector.h \
  /usr/include/c++/11.1.0/bits/stl_bvector.h \
@@ -149,9 +150,7 @@ CMakeFiles/multi_thread_porxy.dir/Connections/ClientConnection.cpp.o: \
  /usr/include/c++/11.1.0/bits/stl_raw_storage_iter.h \
  /usr/include/c++/11.1.0/bits/align.h /usr/include/c++/11.1.0/bit \
  /usr/include/c++/11.1.0/bits/uses_allocator.h \
- /usr/include/c++/11.1.0/bits/unique_ptr.h \
- /usr/include/c++/11.1.0/utility \
- /usr/include/c++/11.1.0/bits/stl_relops.h /usr/include/c++/11.1.0/tuple \
+ /usr/include/c++/11.1.0/bits/unique_ptr.h /usr/include/c++/11.1.0/tuple \
  /usr/include/c++/11.1.0/array /usr/include/c++/11.1.0/bits/invoke.h \
  /usr/include/c++/11.1.0/bits/shared_ptr.h \
  /usr/include/c++/11.1.0/bits/shared_ptr_base.h \
