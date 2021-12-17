@@ -219,8 +219,10 @@ CMakeFiles/multi_thread_porxy.dir/main.cpp.o: \
  /home/yevsyukof/CLionProjects/multi_thread_porxy/Constants.h \
  /home/yevsyukof/CLionProjects/multi_thread_porxy/Cache/Cache.h \
  /home/yevsyukof/CLionProjects/multi_thread_porxy/Cache/CacheEntry.h \
+ /home/yevsyukof/CLionProjects/multi_thread_porxy/Cache/Buffer.h \
  /home/yevsyukof/CLionProjects/multi_thread_porxy/Connections/ClientConnection.h \
  /home/yevsyukof/CLionProjects/multi_thread_porxy/Connections/Connection.h \
+ /home/yevsyukof/CLionProjects/multi_thread_porxy/Cache/Buffer.h \
  /home/yevsyukof/CLionProjects/multi_thread_porxy/Connections/../Cache/CacheEntry.h \
  /home/yevsyukof/CLionProjects/multi_thread_porxy/Connections/../HttpParser/httprequestparser.h \
  /usr/include/c++/11.1.0/algorithm \
@@ -238,4 +240,5 @@ CMakeFiles/multi_thread_porxy.dir/main.cpp.o: \
  /usr/include/c++/11.1.0/sstream /usr/include/c++/11.1.0/bits/sstream.tcc \
  /home/yevsyukof/CLionProjects/multi_thread_porxy/Connections/../HttpParser/request.h \
  /home/yevsyukof/CLionProjects/multi_thread_porxy/Connections/ServerConnection.h \
- /home/yevsyukof/CLionProjects/multi_thread_porxy/utils/WaitersMap.h
+ /home/yevsyukof/CLionProjects/multi_thread_porxy/utils/WaitersMap.h \
+ /home/yevsyukof/CLionProjects/multi_thread_porxy/utils/../Connections/ClientConnection.h

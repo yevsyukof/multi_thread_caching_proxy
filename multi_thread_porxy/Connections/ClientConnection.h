@@ -10,10 +10,8 @@ enum class ClientConnectionStates {
     CONNECTION_ERROR, // ошибка с соединением
     WRONG_REQUEST, // полученный реквест не валиден
     RECEIVING_REQUEST, // соединение в процессе получения запроса
-    PROCESSING_REQUEST, // запрос клиента обрабатывается прокси-сервером
     WAITING_FOR_RESPONSE, // запрос клиента передан на вышестоящий сервер
     RECEIVING_ANSWER, // клиент получает ответ
-    ANSWER_RECEIVED // ответ передан, соединение отработано
 };
 
 enum class ClientRequestErrors {
@@ -36,6 +34,10 @@ public:
 
     ClientConnectionStates getState() const {
         return connectionState;
+    }
+
+    ClientRequestErrors getError() const {
+        return requestValidatorState;
     }
 
 //    void setState(const ClientConnectionStates &state) {
@@ -66,8 +68,7 @@ private:
     std::shared_ptr<std::string> processedRequestForServer;
     std::string requiredHost;
 
-    std::shared_ptr<std::vector<char>> sendAnswerBuf;
-    int sendAnswerOffset;
+    long long sendAnswerOffset;
 };
 
 

@@ -4,6 +4,7 @@
 #include <iostream>
 #include <netdb.h>
 #include <cstring>
+#include <pthread.h>
 
 #include "Proxy.h"
 #include "CurTime.h"
@@ -33,23 +34,47 @@ Proxy::Proxy(int listeningPort) : isInterrupt(false) {
 }
 
 void Proxy::handleArrivalOfClientRequest(const std::shared_ptr<ClientConnection> &clientConnection) {
-    switch (clientConnection->getState()) {
-        case ClientConnectionStates::CONNECTION_ERROR:
-            break;
-        case ClientConnectionStates::WRONG_REQUEST:
-            break;
-        case ClientConnectionStates::WAITING_FOR_REQUEST:
-            break;
-        case ClientConnectionStates::RECEIVING_REQUEST:
-            break;
-        case ClientConnectionStates::PROCESSING_REQUEST:
-            break;
-        case ClientConnectionStates::WAITING_FOR_RESPONSE:
-            break;
-        case ClientConnectionStates::RECEIVING_ANSWER:
-            break;
-        case ClientConnectionStates::ANSWER_RECEIVED:
-            break;
+    if (clientConnection->getState() == ClientConnectionStates::WRONG_REQUEST) {
+        switch (clientConnection->getError()) {
+            case ClientRequestErrors::ERROR_400: {
+                clientConnection->setBuffer(
+                        Buffer(std::make_shared<std::vector<char>>(
+                                std::vector<char>(ERROR_MESSAGE_400.begin(), ERROR_MESSAGE_400.end()))));
+                break;
+            }
+            case ClientRequestErrors::ERROR_405: {
+                clientConnection->setBuffer(
+                        Buffer(std::make_shared<std::vector<char>>(
+                                std::vector<char>(ERROR_MESSAGE_405.begin(), ERROR_MESSAGE_405.end()))));
+                break;
+            }
+            case ClientRequestErrors::ERROR_500: {
+                clientConnection->setBuffer(
+                        Buffer(std::make_shared<std::vector<char>>(
+                                std::vector<char>(ERROR_MESSAGE_500.begin(), ERROR_MESSAGE_500.end()))));
+                break;
+            }
+            case ClientRequestErrors::ERROR_501: {
+                clientConnection->setBuffer(
+                        Buffer(std::make_shared<std::vector<char>>(
+                                std::vector<char>(ERROR_MESSAGE_501.begin(), ERROR_MESSAGE_501.end()))));
+                break;
+            }
+            case ClientRequestErrors::ERROR_504: {
+                clientConnection->setBuffer(
+                        Buffer(std::make_shared<std::vector<char>>(
+                                std::vector<char>(ERROR_MESSAGE_504.begin(), ERROR_MESSAGE_504.end()))));
+                break;
+            }
+            case ClientRequestErrors::ERROR_505: {
+                clientConnection->setBuffer(
+                        Buffer(std::make_shared<std::vector<char>>(
+                                std::vector<char>(ERROR_MESSAGE_505.begin(), ERROR_MESSAGE_505.end()))));
+                break;
+            }
+        }
+    } else {
+        // TODO
     }
 }
 
@@ -60,10 +85,14 @@ void *Proxy::handleClientConnection(void *arg) {
     clientConnection->receiveRequest();
     if (clientConnection->getState() != ClientConnectionStates::CONNECTION_ERROR) {
         handleArrivalOfClientRequest(clientConnection);
-
+        clientConnection->sendAnswer();
+        clientConnection->close();
+    } else {
+        clientConnection->close();
+        pthread_exit(reinterpret_cast<void *>(EXIT_FAILURE));
     }
 
-    pthread_exit(EXIT_SUCCESS);
+    pthread_exit(reinterpret_cast<void *>(EXIT_SUCCESS));
 }
 
 void Proxy::run() {

@@ -24,9 +24,9 @@ public:
         connectionState = state;
     }
 
-    const std::shared_ptr<std::vector<char>>& getRecvBuf() const {
-        return recvBuf;
-    }
+//    const std::shared_ptr<std::vector<char>>& getRecvBuf() const {
+//        return recvBuf;
+//    } /// TODO
 
     int sendRequest();
 

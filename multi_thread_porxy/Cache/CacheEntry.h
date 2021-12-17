@@ -46,6 +46,10 @@ public:
         }
     }
 
+    bool getState() {
+        return isReady;
+    }
+
 private:
     pthread_mutex_t mutex {};
 };

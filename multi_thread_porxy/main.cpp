@@ -28,7 +28,11 @@ Proxy cachingProxy;
 
 
 int main() {
+//    CacheEntry cacheEntry;
+//    std::cout << cacheEntry.getState();
+
+
 //    set_sig_handler();
-    cachingProxy = Proxy(LISTENING_PORT);
-    cachingProxy.run();
+//    cachingProxy = Proxy(LISTENING_PORT);
+//    cachingProxy.run();
 }

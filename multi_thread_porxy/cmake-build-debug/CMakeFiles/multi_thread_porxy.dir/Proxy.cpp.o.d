@@ -1,24 +1,23 @@
 CMakeFiles/multi_thread_porxy.dir/Proxy.cpp.o: \
  /home/yevsyukof/CLionProjects/multi_thread_porxy/Proxy.cpp \
- /usr/include/stdc-predef.h /usr/include/poll.h /usr/include/sys/poll.h \
+ /usr/include/stdc-predef.h /usr/include/sys/socket.h \
  /usr/include/features.h /usr/include/sys/cdefs.h \
  /usr/include/bits/wordsize.h /usr/include/bits/long-double.h \
  /usr/include/gnu/stubs.h /usr/include/gnu/stubs-64.h \
- /usr/include/bits/poll.h /usr/include/bits/types/__sigset_t.h \
- /usr/include/bits/types/struct_timespec.h /usr/include/bits/types.h \
- /usr/include/bits/timesize.h /usr/include/bits/typesizes.h \
- /usr/include/bits/time64.h /usr/include/bits/endian.h \
- /usr/include/bits/endianness.h /usr/include/sys/socket.h \
  /usr/include/bits/types/struct_iovec.h \
  /usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/stddef.h \
  /usr/include/bits/socket.h /usr/include/sys/types.h \
+ /usr/include/bits/types.h /usr/include/bits/timesize.h \
+ /usr/include/bits/typesizes.h /usr/include/bits/time64.h \
  /usr/include/bits/types/clock_t.h /usr/include/bits/types/clockid_t.h \
  /usr/include/bits/types/time_t.h /usr/include/bits/types/timer_t.h \
  /usr/include/bits/stdint-intn.h /usr/include/endian.h \
+ /usr/include/bits/endian.h /usr/include/bits/endianness.h \
  /usr/include/bits/byteswap.h /usr/include/bits/uintn-identity.h \
  /usr/include/sys/select.h /usr/include/bits/select.h \
- /usr/include/bits/types/sigset_t.h \
+ /usr/include/bits/types/sigset_t.h /usr/include/bits/types/__sigset_t.h \
  /usr/include/bits/types/struct_timeval.h \
+ /usr/include/bits/types/struct_timespec.h \
  /usr/include/bits/pthreadtypes.h /usr/include/bits/thread-shared-types.h \
  /usr/include/bits/pthreadtypes-arch.h /usr/include/bits/struct_mutex.h \
  /usr/include/bits/struct_rwlock.h /usr/include/bits/socket_type.h \
@@ -151,9 +150,7 @@ CMakeFiles/multi_thread_porxy.dir/Proxy.cpp.o: \
  /usr/include/rpc/netdb.h /usr/include/bits/types/sigevent_t.h \
  /usr/include/bits/types/__sigval_t.h /usr/include/bits/netdb.h \
  /usr/include/c++/11.1.0/cstring /usr/include/string.h \
- /usr/include/strings.h /usr/include/fcntl.h /usr/include/bits/fcntl.h \
- /usr/include/bits/fcntl-linux.h /usr/include/linux/falloc.h \
- /usr/include/bits/stat.h /usr/include/bits/struct_stat.h \
+ /usr/include/strings.h \
  /home/yevsyukof/CLionProjects/multi_thread_porxy/Proxy.h \
  /usr/include/c++/11.1.0/map /usr/include/c++/11.1.0/bits/stl_tree.h \
  /usr/include/c++/11.1.0/ext/aligned_buffer.h \
@@ -213,8 +210,10 @@ CMakeFiles/multi_thread_porxy.dir/Proxy.cpp.o: \
  /home/yevsyukof/CLionProjects/multi_thread_porxy/Constants.h \
  /home/yevsyukof/CLionProjects/multi_thread_porxy/Cache/Cache.h \
  /home/yevsyukof/CLionProjects/multi_thread_porxy/Cache/CacheEntry.h \
+ /home/yevsyukof/CLionProjects/multi_thread_porxy/Cache/Buffer.h \
  /home/yevsyukof/CLionProjects/multi_thread_porxy/Connections/ClientConnection.h \
  /home/yevsyukof/CLionProjects/multi_thread_porxy/Connections/Connection.h \
+ /home/yevsyukof/CLionProjects/multi_thread_porxy/Cache/Buffer.h \
  /home/yevsyukof/CLionProjects/multi_thread_porxy/Connections/../Cache/CacheEntry.h \
  /home/yevsyukof/CLionProjects/multi_thread_porxy/Connections/../HttpParser/httprequestparser.h \
  /usr/include/c++/11.1.0/algorithm \
@@ -232,5 +231,6 @@ CMakeFiles/multi_thread_porxy.dir/Proxy.cpp.o: \
  /home/yevsyukof/CLionProjects/multi_thread_porxy/Connections/../HttpParser/request.h \
  /home/yevsyukof/CLionProjects/multi_thread_porxy/Connections/ServerConnection.h \
  /home/yevsyukof/CLionProjects/multi_thread_porxy/utils/WaitersMap.h \
+ /home/yevsyukof/CLionProjects/multi_thread_porxy/utils/../Connections/ClientConnection.h \
  /home/yevsyukof/CLionProjects/multi_thread_porxy/CurTime.h \
  /usr/include/c++/11.1.0/ctime

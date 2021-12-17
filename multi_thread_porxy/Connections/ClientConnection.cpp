@@ -2,12 +2,12 @@
 #include <iostream>
 #include "ClientConnection.h"
 
-#define RECV_BUF_SIZE 65536
-
+#define RECV_BUF_SIZE 32768
 
 ClientConnection::ClientConnection(int connectionSocketFd)
         : Connection(connectionSocketFd),
-          processedRequestForServer(nullptr) {}
+          processedRequestForServer(nullptr),
+          sendAnswerOffset(0) {}
 
 
 void ClientConnection::parseRequestAndCheckValidity() {
@@ -70,7 +70,7 @@ void ClientConnection::parseRequestAndCheckValidity() {
         ss << "\r\n";
     }
 
-    connectionState = ClientConnectionStates::PROCESSING_REQUEST;
+    connectionState = ClientConnectionStates::WAITING_FOR_RESPONSE;
     requestValidatorState = ClientRequestErrors::WITHOUT_ERRORS;
 
     processedRequestForServer = std::make_shared<std::string>(ss.str());
@@ -107,23 +107,23 @@ void ClientConnection::receiveRequest() {
 }
 
 bool ClientConnection::sendAnswer() {
-    int sendCount;
+    while (buffer.haveRemainingDataFrom(sendAnswerOffset)) {
+        buffer.lock();
+        {
+            long long sendCount;
+            if ((sendCount = send(connectionSocketFd,
+                                  buffer.getData()->data() + sendAnswerOffset,
+                                  buffer.getData()->size() - sendAnswerOffset, 0)) == -1) {
+                std::cout << "--------sendAnswer(): SEND ERROR--------" << std::endl;
 
+                connectionState = ClientConnectionStates::CONNECTION_ERROR;
+                return false;
+            } else {
+                sendAnswerOffset += sendCount;
+            }
+        }
+        buffer.unlock();
+    }
+    std::cout << "--------sendAnswer(): CLIENT RECEIVE ANSWER--------" << std::endl;
     return true;
 }
-
-//void ClientConnection::initializeAnswerSending(const std::string &errorMessage) {
-//    sendAnswerOffset = 0;
-//    sendAnswerBuf = std::make_shared<std::vector<char>>(
-//            std::vector<char>(errorMessage.begin(), errorMessage.end()));
-//}
-//
-//void ClientConnection::initializeAnswerSending(const CacheEntry &cacheEntry) {
-//    sendAnswerOffset = 0;
-//    sendAnswerBuf = cacheEntry.getCacheEntryData();
-//}
-//
-//void ClientConnection::initializeAnswerSending(const std::shared_ptr<std::vector<char>> &notCachingAnswer) {
-//    sendAnswerOffset = 0;
-//    sendAnswerBuf = notCachingAnswer;
-//}
