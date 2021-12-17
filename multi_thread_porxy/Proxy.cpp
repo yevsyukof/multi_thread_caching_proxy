@@ -32,11 +32,38 @@ Proxy::Proxy(int listeningPort) : isInterrupt(false) {
     }
 }
 
+void Proxy::handleArrivalOfClientRequest(const std::shared_ptr<ClientConnection> &clientConnection) {
+    switch (clientConnection->getState()) {
+        case ClientConnectionStates::CONNECTION_ERROR:
+            break;
+        case ClientConnectionStates::WRONG_REQUEST:
+            break;
+        case ClientConnectionStates::WAITING_FOR_REQUEST:
+            break;
+        case ClientConnectionStates::RECEIVING_REQUEST:
+            break;
+        case ClientConnectionStates::PROCESSING_REQUEST:
+            break;
+        case ClientConnectionStates::WAITING_FOR_RESPONSE:
+            break;
+        case ClientConnectionStates::RECEIVING_ANSWER:
+            break;
+        case ClientConnectionStates::ANSWER_RECEIVED:
+            break;
+    }
+}
+
 void *Proxy::handleClientConnection(void *arg) {
     std::shared_ptr<ClientConnection> clientConnection
-            = std::move(*((std::shared_ptr<ClientConnection> *) arg));
+            = std::move(*reinterpret_cast<std::shared_ptr<ClientConnection> *>(arg));
 
-    pthread_exit(nullptr);
+    clientConnection->receiveRequest();
+    if (clientConnection->getState() != ClientConnectionStates::CONNECTION_ERROR) {
+        handleArrivalOfClientRequest(clientConnection);
+
+    }
+
+    pthread_exit(EXIT_SUCCESS);
 }
 
 void Proxy::run() {
@@ -51,7 +78,11 @@ void Proxy::run() {
         std::cout << "~~~~~~~~~~~~~~~~ NEW CONNECTION: " << acceptedSockFd
                   << " ~~~~~~~~~~~~~~~~" << " " << getTime() << std::endl;
 
-        handleClientConnection(acceptedSockFd);
+        pthread_t newThreadId;
+
+        pthread_create(&newThreadId, nullptr, handleClientConnection,
+                       new ClientConnection(acceptedSockFd));
+        pthread_detach(newThreadId);
     }
 }
 

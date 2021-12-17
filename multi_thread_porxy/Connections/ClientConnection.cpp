@@ -78,27 +78,30 @@ void ClientConnection::parseRequestAndCheckValidity() {
     requestUrl = clientHttpRequest.method + clientHttpRequest.uri;
 }
 
-bool ClientConnection::receiveRequest() {
+void ClientConnection::receiveRequest() {
     char buf[RECV_BUF_SIZE];
     ssize_t recvCount;
 
-    if ((recvCount = recv(connectionSocketFd, buf, RECV_BUF_SIZE, 0)) <= 0) {
-        std::cout << "--------RECEIVE FROM CLIENT SOCKET ERROR--------" << std::endl;
+    bool hasRequestEnd = false;
+    while (!hasRequestEnd) {
+        if ((recvCount = recv(connectionSocketFd, buf, RECV_BUF_SIZE, 0)) <= 0) {
+            std::cout << "--------RECEIVE FROM CLIENT SOCKET ERROR--------" << std::endl;
 
-        connectionState = ClientConnectionStates::CONNECTION_ERROR;
-        return true;
-    } else {
-        recvBuf.insert(recvBuf.end(), buf, buf + recvCount);
-        if (recvBuf.size() >= 4 && recvBuf[recvBuf.size() - 4] == '\r'
-            && recvBuf[recvBuf.size() - 3] == '\n'
-            && recvBuf[recvBuf.size() - 2] == '\r'
-            && recvBuf[recvBuf.size() - 1] == '\n') {
-
-            parseRequestAndCheckValidity();
-            return true;
+            connectionState = ClientConnectionStates::CONNECTION_ERROR;
+            hasRequestEnd = true;
         } else {
-            connectionState = ClientConnectionStates::RECEIVING_REQUEST;
-            return false;
+            recvBuf.insert(recvBuf.end(), buf, buf + recvCount);
+
+            if (recvBuf.size() >= 4 && recvBuf[recvBuf.size() - 4] == '\r'
+                && recvBuf[recvBuf.size() - 3] == '\n'
+                && recvBuf[recvBuf.size() - 2] == '\r'
+                && recvBuf[recvBuf.size() - 1] == '\n') {
+
+                parseRequestAndCheckValidity(); // внутри установлилось новое состояние соединения
+                hasRequestEnd = true;
+            } else {
+                connectionState = ClientConnectionStates::RECEIVING_REQUEST;
+            }
         }
     }
 }

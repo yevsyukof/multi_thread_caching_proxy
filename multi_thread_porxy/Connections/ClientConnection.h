@@ -9,7 +9,6 @@
 enum class ClientConnectionStates {
     CONNECTION_ERROR, // ошибка с соединением
     WRONG_REQUEST, // полученный реквест не валиден
-    WAITING_FOR_REQUEST, // соединение еще ничего не прислало
     RECEIVING_REQUEST, // соединение в процессе получения запроса
     PROCESSING_REQUEST, // запрос клиента обрабатывается прокси-сервером
     WAITING_FOR_RESPONSE, // запрос клиента передан на вышестоящий сервер
@@ -31,13 +30,13 @@ class ClientConnection : public Connection {
 public:
     ClientConnection(int connectionSocketFd);
 
-    bool receiveRequest();
+    void receiveRequest();
 
     bool sendAnswer();
 
-//    ClientConnectionStates getState() const {
-//        return connectionState;
-//    }
+    ClientConnectionStates getState() const {
+        return connectionState;
+    }
 
 //    void setState(const ClientConnectionStates &state) {
 //        connectionState = state;
