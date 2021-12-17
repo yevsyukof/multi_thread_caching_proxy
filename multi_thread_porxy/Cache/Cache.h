@@ -18,8 +18,12 @@ public:
         pthread_mutex_destroy(&mutex);
     }
 
-    pthread_mutex_t& getMutex() {
-        return mutex;
+    int lock() {
+        return pthread_mutex_lock(&mutex);
+    }
+
+    int unlock() {
+        return pthread_mutex_unlock(&mutex);
     }
 
     bool contains(const std::string &url) {
@@ -27,18 +31,18 @@ public:
     }
 
     void addCacheEntry(const std::string &url,
-                       const std::shared_ptr<std::vector<char>>& entryData) {
-        urlToCacheEntry[url] = CacheEntry(entryData);
+                       const std::shared_ptr<CacheEntry>& entry) {
+        urlToCacheEntry[url] = entry;
     }
 
-    const CacheEntry& getCacheEntry(const std::string &url) const {
-        return urlToCacheEntry.at(url); // TODO
+    const std::shared_ptr<CacheEntry>& getCacheEntry(const std::string &url) const {
+        return urlToCacheEntry.at(url);
     }
 
 private:
     pthread_mutex_t mutex {};
 
-    std::map<std::string, CacheEntry> urlToCacheEntry;
+    std::map<std::string, std::shared_ptr<CacheEntry>> urlToCacheEntry;
 };
 
 

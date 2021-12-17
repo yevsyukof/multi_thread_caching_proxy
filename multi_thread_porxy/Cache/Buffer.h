@@ -6,6 +6,8 @@
 #include <vector>
 #include <memory>
 
+#define SUCCESS 1
+
 class Buffer {
 public:
     // без переданных параметров - внутри создается свой пустой буффер
@@ -15,11 +17,11 @@ public:
 
     virtual ~Buffer() = default;
 
-    virtual void lock() {  } // inline?
+    virtual int lock() { return SUCCESS; } // inline?
 
-    virtual void unlock() {  }
+    virtual int unlock() { return SUCCESS; }
 
-    bool virtual haveRemainingDataFrom(long long threadOffset) {
+    virtual bool haveRemainingDataFrom(long long threadOffset) {
         return (data->size() - threadOffset) > 0;
     }
 
@@ -27,9 +29,18 @@ public:
         return data;
     }
 
+    Buffer& operator=(const Buffer& other) {
+        if (this == &other) {
+            return *this;
+        }
+        this->data = other.data;
+        this->isReady = other.isReady;
+        return *this;
+    }
+
 protected:
     std::shared_ptr<std::vector<char>> data;
-    bool isReady;
+    volatile bool isReady;
 };
 
 

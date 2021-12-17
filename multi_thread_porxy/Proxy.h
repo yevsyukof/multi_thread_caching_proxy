@@ -32,7 +32,7 @@ public:
     void shutdown();
 
 private:
-    void handleNewClientConnection(int acceptedSockFd);
+    void* handleClientConnection(void *arg);
 
     static int resolveRequiredHost(const std::string &host);
 

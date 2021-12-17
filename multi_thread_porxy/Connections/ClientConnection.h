@@ -29,25 +29,19 @@ enum class ClientRequestErrors {
 
 class ClientConnection : public Connection {
 public:
-    ClientConnection(int connectionSocketFd, int inPollListIdx);
+    ClientConnection(int connectionSocketFd);
 
-    int receiveRequest();
+    bool receiveRequest();
 
-    void initializeAnswerSending(const std::string &errorMessage);
+    bool sendAnswer();
 
-    void initializeAnswerSending(const std::shared_ptr<std::vector<char>> &notCachingAnswer);
+//    ClientConnectionStates getState() const {
+//        return connectionState;
+//    }
 
-    void initializeAnswerSending(const CacheEntry &cacheEntry);
-
-    int sendAnswer();
-
-    ClientConnectionStates getState() const {
-        return connectionState;
-    }
-
-    void setState(const ClientConnectionStates &state) {
-        connectionState = state;
-    }
+//    void setState(const ClientConnectionStates &state) {
+//        connectionState = state;
+//    }
 
     const httpparser::Request& getClientHttpRequest() const {
         return clientHttpRequest;
@@ -68,6 +62,7 @@ private:
     ClientConnectionStates connectionState;
     ClientRequestErrors requestValidatorState;
 
+    std::vector<char> recvBuf;
     httpparser::Request clientHttpRequest;
     std::shared_ptr<std::string> processedRequestForServer;
     std::string requiredHost;

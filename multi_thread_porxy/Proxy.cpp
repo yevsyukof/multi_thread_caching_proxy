@@ -1,16 +1,12 @@
-#include <poll.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <cstdlib>
 #include <iostream>
 #include <netdb.h>
 #include <cstring>
-#include <fcntl.h>
+
 #include "Proxy.h"
-
 #include "CurTime.h"
-
-extern int errno;
 
 
 Proxy::Proxy(int listeningPort) : isInterrupt(false) {
@@ -36,8 +32,11 @@ Proxy::Proxy(int listeningPort) : isInterrupt(false) {
     }
 }
 
-void Proxy::handleNewClientConnection(int acceptedSockFd) {
+void *Proxy::handleClientConnection(void *arg) {
+    std::shared_ptr<ClientConnection> clientConnection
+            = std::move(*((std::shared_ptr<ClientConnection> *) arg));
 
+    pthread_exit(nullptr);
 }
 
 void Proxy::run() {
@@ -45,14 +44,14 @@ void Proxy::run() {
         int acceptedSockFd = accept(listeningSocketFd, nullptr, nullptr);
 
         if (acceptedSockFd < 0) {
-            std::cout << "--------Proxy::handleNewClientConnection(): Error accepting connection--------" << std::endl;
+            std::cout << "--------Proxy::handleClientConnection(): Error accepting connection--------" << std::endl;
             continue;
         }
 
         std::cout << "~~~~~~~~~~~~~~~~ NEW CONNECTION: " << acceptedSockFd
                   << " ~~~~~~~~~~~~~~~~" << " " << getTime() << std::endl;
 
-        handleNewClientConnection(acceptedSockFd);
+        handleClientConnection(acceptedSockFd);
     }
 }
 
@@ -99,8 +98,6 @@ int Proxy::resolveRequiredHost(const std::string &host) {
     std::cout << "END RESOLVE ADDRESS" << " " << getTime() << std::endl;
 
     freeaddrinfo(resolvedList);
-
-//    fcntl(found_socket, F_SETFL, fcntl(found_socket, F_GETFL, 0) | O_NONBLOCK); ///
     return found_socket;
 }
 
