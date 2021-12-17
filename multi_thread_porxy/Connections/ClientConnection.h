@@ -40,7 +40,7 @@ public:
         return requestValidatorState;
     }
 
-//    void setState(const ClientConnectionStates &state) {
+//    void setReadyState(const ClientConnectionStates &state) {
 //        connectionState = state;
 //    }
 

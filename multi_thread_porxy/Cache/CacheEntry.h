@@ -11,6 +11,7 @@ public:
     CacheEntry() : Buffer() {
         isReady = false;
         mutex = PTHREAD_MUTEX_INITIALIZER;
+        conditionVar = PTHREAD_COND_INITIALIZER;
     }
 
 //    explicit CacheEntry(const std::shared_ptr<std::vector<char>> &entryData) {
@@ -19,6 +20,7 @@ public:
 
     ~CacheEntry() override {
         pthread_mutex_destroy(&mutex);
+        pthread_cond_destroy(&conditionVar);
     }
 
     int lock() override {
@@ -38,20 +40,35 @@ public:
     }
 
     bool haveRemainingDataFrom(long long threadOffset) override {
-        if (isReady) {
-            return (data->size() - threadOffset) > 0;
-        } else {
-            return true;
-            // TODO работа с условной переменной
+        bool haveData;
+        lock();
+        {
+            if ((data->size() - threadOffset) > 0) {
+                haveData = true;
+            } else if (!isReady) {
+                while ((data->size() - threadOffset) == 0 && !isReady) {
+                    pthread_cond_wait(&conditionVar, &mutex);
+                }
+                haveData = (data->size() - threadOffset) > 0;
+            } else {
+                haveData = false;
+            }
         }
+        unlock();
+        return haveData;
     }
 
-    bool getState() {
-        return isReady;
+    void setReadyState(bool state) {
+        isReady = state;
+    }
+
+    int notifyHolders() {
+        return pthread_cond_broadcast(&conditionVar);
     }
 
 private:
     pthread_mutex_t mutex {};
+    pthread_cond_t conditionVar {};
 };
 
 

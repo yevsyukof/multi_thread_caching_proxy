@@ -55,9 +55,34 @@ bool ServerConnection::isResponseStatusIs200() const {
 }
 
 void ServerConnection::receiveAnswer() {
+    char buf[RECV_BUF_SIZE];
+    ssize_t recvCount;
+
+    bool hasReceiveAll = false;
+    while (!hasReceiveAll) {
+        if ((recvCount = recv(connectionSocketFd, buf, RECV_BUF_SIZE, 0)) < 0) {
+
+            std::cout << "\n----------------RECEIVE FROM SERVER SOCKET ERROR----------------\n" << std::endl;
+            connectionState = ServerConnectionState::CONNECTION_ERROR;
+            hasReceiveAll = true;
+        } else if (recvCount > 0) {
+            serverAnswerBuffer->lock();
+            {
+                serverAnswerBuffer->getData()->insert(serverAnswerBuffer->getData()->end(),
+                                                      buf, buf + recvCount);
+                serverAnswerBuffer->notifyHolders();
+            }
+            serverAnswerBuffer->unlock();
+            connectionState = ServerConnectionState::RECEIVING_ANSWER;
+        } else {
+            hasReceiveAll = true;
+        }
+    }
+    serverAnswerBuffer->setReadyState(true);
+
     serverAnswerBuffer->lock();
     {
-
+        serverAnswerBuffer->notifyHolders();
     }
     serverAnswerBuffer->unlock();
 }
