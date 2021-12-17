@@ -15,9 +15,9 @@
 #include "utils/WaitersMap.h"
 
 
-//static WaitersMap waitersMap = WaitersMap();
+static WaitersMap activeServersConnections;
 
-static Cache cacheStorage = Cache();
+static Cache cacheStorage;
 
 class Proxy {
 public:
@@ -36,7 +36,7 @@ private:
 
     static void* handleNewServerConnection(void *arg);
 
-    static void handleArrivalOfClientRequest(const std::shared_ptr<ClientConnection> &clientConnection);
+    static void handleArrivalOfClientRequest(const std::shared_ptr<ClientConnection *> &clientConnection);
 
     static int resolveRequiredHost(const std::string &host);
 

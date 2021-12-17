@@ -26,8 +26,11 @@ Proxy cachingProxy;
 //    sigaction(SIGINT, &sig_action, nullptr);
 //}
 
-
 int main() {
+//    std::shared_ptr<CacheEntry> cacheEntry = std::make_shared<CacheEntry>(CacheEntry());
+//    std::shared_ptr<Buffer> buffer = cacheEntry;
+//    std::shared_ptr<Buffer> buffer1 = std::make_shared<Buffer>(Buffer());
+
 //    CacheEntry cacheEntry;
 //    std::cout << cacheEntry.getState();
 

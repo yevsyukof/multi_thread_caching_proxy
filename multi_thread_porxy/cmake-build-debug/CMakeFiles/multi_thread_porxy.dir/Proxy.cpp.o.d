@@ -38,10 +38,10 @@ CMakeFiles/multi_thread_porxy.dir/Proxy.cpp.o: \
  /usr/include/bits/waitstatus.h /usr/include/bits/floatn.h \
  /usr/include/bits/floatn-common.h /usr/include/bits/types/locale_t.h \
  /usr/include/bits/types/__locale_t.h /usr/include/alloca.h \
- /usr/include/bits/stdlib-float.h /usr/include/c++/11.1.0/bits/std_abs.h \
- /usr/include/c++/11.1.0/iostream /usr/include/c++/11.1.0/ostream \
- /usr/include/c++/11.1.0/ios /usr/include/c++/11.1.0/iosfwd \
- /usr/include/c++/11.1.0/bits/stringfwd.h \
+ /usr/include/bits/stdlib-bsearch.h /usr/include/bits/stdlib-float.h \
+ /usr/include/c++/11.1.0/bits/std_abs.h /usr/include/c++/11.1.0/iostream \
+ /usr/include/c++/11.1.0/ostream /usr/include/c++/11.1.0/ios \
+ /usr/include/c++/11.1.0/iosfwd /usr/include/c++/11.1.0/bits/stringfwd.h \
  /usr/include/c++/11.1.0/bits/memoryfwd.h \
  /usr/include/c++/11.1.0/bits/postypes.h /usr/include/c++/11.1.0/cwchar \
  /usr/include/wchar.h \
@@ -124,11 +124,11 @@ CMakeFiles/multi_thread_porxy.dir/Proxy.cpp.o: \
  /usr/include/bits/types/__fpos_t.h /usr/include/bits/types/__fpos64_t.h \
  /usr/include/bits/types/struct_FILE.h \
  /usr/include/bits/types/cookie_io_functions_t.h \
- /usr/include/bits/stdio_lim.h /usr/include/c++/11.1.0/cerrno \
- /usr/include/errno.h /usr/include/bits/errno.h \
- /usr/include/linux/errno.h /usr/include/asm/errno.h \
- /usr/include/asm-generic/errno.h /usr/include/asm-generic/errno-base.h \
- /usr/include/bits/types/error_t.h \
+ /usr/include/bits/stdio_lim.h /usr/include/bits/stdio.h \
+ /usr/include/c++/11.1.0/cerrno /usr/include/errno.h \
+ /usr/include/bits/errno.h /usr/include/linux/errno.h \
+ /usr/include/asm/errno.h /usr/include/asm-generic/errno.h \
+ /usr/include/asm-generic/errno-base.h /usr/include/bits/types/error_t.h \
  /usr/include/c++/11.1.0/bits/charconv.h \
  /usr/include/c++/11.1.0/bits/basic_string.tcc \
  /usr/include/c++/11.1.0/bits/locale_classes.tcc \
@@ -230,6 +230,7 @@ CMakeFiles/multi_thread_porxy.dir/Proxy.cpp.o: \
  /usr/include/c++/11.1.0/sstream /usr/include/c++/11.1.0/bits/sstream.tcc \
  /home/yevsyukof/CLionProjects/multi_thread_porxy/Connections/../HttpParser/request.h \
  /home/yevsyukof/CLionProjects/multi_thread_porxy/Connections/ServerConnection.h \
+ /home/yevsyukof/CLionProjects/multi_thread_porxy/Cache/CacheEntry.h \
  /home/yevsyukof/CLionProjects/multi_thread_porxy/utils/WaitersMap.h \
  /home/yevsyukof/CLionProjects/multi_thread_porxy/utils/../Connections/ClientConnection.h \
  /home/yevsyukof/CLionProjects/multi_thread_porxy/CurTime.h \

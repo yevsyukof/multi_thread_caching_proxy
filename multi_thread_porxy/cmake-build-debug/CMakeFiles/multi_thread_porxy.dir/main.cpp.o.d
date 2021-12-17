@@ -92,8 +92,8 @@ CMakeFiles/multi_thread_porxy.dir/main.cpp.o: \
  /usr/include/endian.h /usr/include/bits/byteswap.h \
  /usr/include/bits/uintn-identity.h /usr/include/sys/select.h \
  /usr/include/bits/select.h /usr/include/bits/types/sigset_t.h \
- /usr/include/alloca.h /usr/include/bits/stdlib-float.h \
- /usr/include/c++/11.1.0/bits/std_abs.h \
+ /usr/include/alloca.h /usr/include/bits/stdlib-bsearch.h \
+ /usr/include/bits/stdlib-float.h /usr/include/c++/11.1.0/bits/std_abs.h \
  /usr/include/c++/11.1.0/bits/algorithmfwd.h \
  /usr/include/c++/11.1.0/initializer_list \
  /usr/include/c++/11.1.0/bits/stl_heap.h \
@@ -115,11 +115,11 @@ CMakeFiles/multi_thread_porxy.dir/main.cpp.o: \
  /usr/include/bits/types/__fpos_t.h /usr/include/bits/types/__fpos64_t.h \
  /usr/include/bits/types/struct_FILE.h \
  /usr/include/bits/types/cookie_io_functions_t.h \
- /usr/include/bits/stdio_lim.h /usr/include/c++/11.1.0/cerrno \
- /usr/include/errno.h /usr/include/bits/errno.h \
- /usr/include/linux/errno.h /usr/include/asm/errno.h \
- /usr/include/asm-generic/errno.h /usr/include/asm-generic/errno-base.h \
- /usr/include/bits/types/error_t.h \
+ /usr/include/bits/stdio_lim.h /usr/include/bits/stdio.h \
+ /usr/include/c++/11.1.0/cerrno /usr/include/errno.h \
+ /usr/include/bits/errno.h /usr/include/linux/errno.h \
+ /usr/include/asm/errno.h /usr/include/asm-generic/errno.h \
+ /usr/include/asm-generic/errno-base.h /usr/include/bits/types/error_t.h \
  /usr/include/c++/11.1.0/bits/charconv.h \
  /usr/include/c++/11.1.0/bits/basic_string.tcc \
  /usr/include/c++/11.1.0/bits/locale_classes.tcc \
@@ -240,5 +240,6 @@ CMakeFiles/multi_thread_porxy.dir/main.cpp.o: \
  /usr/include/c++/11.1.0/sstream /usr/include/c++/11.1.0/bits/sstream.tcc \
  /home/yevsyukof/CLionProjects/multi_thread_porxy/Connections/../HttpParser/request.h \
  /home/yevsyukof/CLionProjects/multi_thread_porxy/Connections/ServerConnection.h \
+ /home/yevsyukof/CLionProjects/multi_thread_porxy/Cache/CacheEntry.h \
  /home/yevsyukof/CLionProjects/multi_thread_porxy/utils/WaitersMap.h \
  /home/yevsyukof/CLionProjects/multi_thread_porxy/utils/../Connections/ClientConnection.h

@@ -31,28 +31,28 @@ public:
         return pthread_mutex_unlock(&mutex);
     }
 
-    static bool containsUrlList(const std::string &url) {
-        return clientsWaitingForResponse.find(url) != clientsWaitingForResponse.end();
+    bool haveActiveServerConnectionFor(const std::string &url) {
+        return activeServersConnections.find(url) != activeServersConnections.end();
     }
 
-    static void addNewWaitingUrlList(const std::string &url) {
-        clientsWaitingForResponse[url];
+    void addNewServerConnection(const std::string &url,
+                                const std::shared_ptr<ServerConnection>& serverConnection) {
+        activeServersConnections[url] = serverConnection;
     }
 
-    static void removeWaitingUrlList(const std::string &url) {
-        clientsWaitingForResponse.erase(url);
+    void removeActiveServerConnectionFor(const std::string &url) {
+        activeServersConnections.erase(url);
     }
 
-    static void addClientAtWaitingUrlList(const std::string &url,
-                                   const std::shared_ptr<ClientConnection>& clientConnection) {
-        clientsWaitingForResponse[url].insert(clientConnection);
+    const std::shared_ptr<ServerConnection>& getServerConnectionFor(const std::string &url) {
+        return activeServersConnections[url];
     }
 
 private:
     pthread_mutex_t mutex {};
 
-    // url -> clients
-    static std::map<std::string, std::set<std::shared_ptr<ClientConnection>>> clientsWaitingForResponse;
+    // url -> server connection
+    std::map<std::string, std::shared_ptr<ServerConnection>> activeServersConnections;
 };
 
 

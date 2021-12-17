@@ -34,71 +34,132 @@ Proxy::Proxy(int listeningPort) : isInterrupt(false) {
 }
 
 void *Proxy::handleNewServerConnection(void *arg) {
+    std::shared_ptr<ServerConnection *> serverConnection =
+            std::make_shared<ServerConnection *>(reinterpret_cast<ServerConnection *>(arg));
 
+    (*serverConnection)->sendRequest();
+    if ((*serverConnection)->getState() != ServerConnectionState::CONNECTION_ERROR) {
+        (*serverConnection)->receiveAnswer();
+
+        activeServersConnections.lock();
+        {
+            if ((*serverConnection)->isCachingAnswerReceived()) {
+                cacheStorage.lock();
+                {
+
+                }
+                cacheStorage.unlock();
+            }
+        }
+        activeServersConnections.unlock();
+
+        (*serverConnection)->close();
+    }
 
     pthread_exit(reinterpret_cast<void *>(EXIT_SUCCESS));
 }
 
-void Proxy::handleArrivalOfClientRequest(const std::shared_ptr<ClientConnection> &clientConnection) {
-    if (clientConnection->getState() == ClientConnectionStates::WRONG_REQUEST) {
-        switch (clientConnection->getError()) {
+void Proxy::handleArrivalOfClientRequest(const std::shared_ptr<ClientConnection *> &clientConnection) {
+    if ((*clientConnection)->getState() == ClientConnectionStates::WRONG_REQUEST) {
+        switch ((*clientConnection)->getError()) {
             case ClientRequestErrors::ERROR_400: {
-                clientConnection->setBuffer(
+                (*clientConnection)->setBuffer(std::make_shared<Buffer>(
                         Buffer(std::make_shared<std::vector<char>>(
-                                std::vector<char>(ERROR_MESSAGE_400.begin(), ERROR_MESSAGE_400.end()))));
+                                std::vector<char>(ERROR_MESSAGE_400.begin(), ERROR_MESSAGE_400.end())))));
                 break;
             }
             case ClientRequestErrors::ERROR_405: {
-                clientConnection->setBuffer(
+                (*clientConnection)->setBuffer(std::make_shared<Buffer>(
                         Buffer(std::make_shared<std::vector<char>>(
-                                std::vector<char>(ERROR_MESSAGE_405.begin(), ERROR_MESSAGE_405.end()))));
+                                std::vector<char>(ERROR_MESSAGE_405.begin(), ERROR_MESSAGE_405.end())))));
                 break;
             }
             case ClientRequestErrors::ERROR_500: {
-                clientConnection->setBuffer(
+                (*clientConnection)->setBuffer(std::make_shared<Buffer>(
                         Buffer(std::make_shared<std::vector<char>>(
-                                std::vector<char>(ERROR_MESSAGE_500.begin(), ERROR_MESSAGE_500.end()))));
+                                std::vector<char>(ERROR_MESSAGE_500.begin(), ERROR_MESSAGE_500.end())))));
                 break;
             }
             case ClientRequestErrors::ERROR_501: {
-                clientConnection->setBuffer(
+                (*clientConnection)->setBuffer(std::make_shared<Buffer>(
                         Buffer(std::make_shared<std::vector<char>>(
-                                std::vector<char>(ERROR_MESSAGE_501.begin(), ERROR_MESSAGE_501.end()))));
+                                std::vector<char>(ERROR_MESSAGE_501.begin(), ERROR_MESSAGE_501.end())))));
                 break;
             }
             case ClientRequestErrors::ERROR_504: {
-                clientConnection->setBuffer(
+                (*clientConnection)->setBuffer(std::make_shared<Buffer>(
                         Buffer(std::make_shared<std::vector<char>>(
-                                std::vector<char>(ERROR_MESSAGE_504.begin(), ERROR_MESSAGE_504.end()))));
+                                std::vector<char>(ERROR_MESSAGE_504.begin(), ERROR_MESSAGE_504.end())))));
                 break;
             }
             case ClientRequestErrors::ERROR_505: {
-                clientConnection->setBuffer(
+                (*clientConnection)->setBuffer(std::make_shared<Buffer>(
                         Buffer(std::make_shared<std::vector<char>>(
-                                std::vector<char>(ERROR_MESSAGE_505.begin(), ERROR_MESSAGE_505.end()))));
+                                std::vector<char>(ERROR_MESSAGE_505.begin(), ERROR_MESSAGE_505.end())))));
                 break;
             }
         }
     } else {
-        pthread_t newThreadId;
-//        pthread_create(&newThreadId, nullptr, handleNewServerConnection,
-//                       new ServerConnection());
-//        pthread_detach(newThreadId);
-        // TODO
+        activeServersConnections.lock();
+        {
+            if (activeServersConnections.haveActiveServerConnectionFor((*clientConnection)->getRequestUrl())) {
+                (*clientConnection)->setBuffer(
+                        activeServersConnections
+                                .getServerConnectionFor(
+                                        (*clientConnection)->getRequestUrl())->getServerAnswerBuffer());
+            } else {
+                cacheStorage.lock();
+                {
+                    if (cacheStorage.contains((*clientConnection)->getRequestUrl())) {
+                        (*clientConnection)->setBuffer(
+                                cacheStorage.getCacheEntry((*clientConnection)->getRequestUrl()));
+                    } else { // записи нет и ее никто не качает
+                        int newServerConnectionSocketFd = resolveRequiredHost((*clientConnection)->getRequiredHost());
+
+                        if (newServerConnectionSocketFd >= 0) {
+                            std::shared_ptr<CacheEntry> maybeNewEntry = std::make_shared<CacheEntry>(CacheEntry());
+                            auto *newServerConnection =
+                                    new ServerConnection(newServerConnectionSocketFd,
+                                                         (*clientConnection)->getRequestUrl(),
+                                                         (*clientConnection)->getProcessedRequestForServer(),
+                                                         maybeNewEntry);
+                            (*clientConnection)->setBuffer(maybeNewEntry);
+
+                            pthread_t newThreadId;
+                            pthread_create(&newThreadId,
+                                           nullptr, handleNewServerConnection,
+                                           newServerConnection);
+                            pthread_detach(newThreadId);
+                        } else { // не можем подключиться к хосту
+                            (*clientConnection)->setBuffer(std::make_shared<Buffer>(
+                                    Buffer(std::make_shared<std::vector<char>>(
+                                            std::vector<char>(ERROR_MESSAGE_504.begin(),
+                                                              ERROR_MESSAGE_504.end())))));
+                        }
+                    }
+                }
+                cacheStorage.unlock();
+            }
+        }
+        activeServersConnections.unlock();
     }
 }
 
 void *Proxy::handleNewClientConnection(void *arg) {
-    std::shared_ptr<ClientConnection> clientConnection
-            = std::move(*reinterpret_cast<std::shared_ptr<ClientConnection> *>(arg));
+//    std::shared_ptr<ClientConnection> clientConnection
+//            = std::move(*reinterpret_cast<std::shared_ptr<ClientConnection> *>(arg));
+/// а так можно ли вообще делать?
 
-    clientConnection->receiveRequest();
-    if (clientConnection->getState() != ClientConnectionStates::CONNECTION_ERROR) {
+    std::shared_ptr<ClientConnection *> clientConnection =
+            std::make_shared<ClientConnection *>(reinterpret_cast<ClientConnection *>(arg));
+
+    (*clientConnection)->receiveRequest();
+    if ((*clientConnection)->getState() != ClientConnectionStates::CONNECTION_ERROR) {
         handleArrivalOfClientRequest(clientConnection);
-        clientConnection->sendAnswer();
-        clientConnection->close();
+        (*clientConnection)->sendAnswer();
+        (*clientConnection)->close();
     } else {
-        clientConnection->close();
+        (*clientConnection)->close();
         pthread_exit(reinterpret_cast<void *>(EXIT_FAILURE));
     }
 
@@ -120,6 +181,7 @@ void Proxy::run() {
         pthread_t newThreadId;
         pthread_create(&newThreadId, nullptr, handleNewClientConnection,
                        new ClientConnection(acceptedSockFd));
+        // хэндлу передается указатель на адрес new CC в куче
         pthread_detach(newThreadId);
     }
 }

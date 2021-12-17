@@ -14,10 +14,6 @@ public:
         conditionVar = PTHREAD_COND_INITIALIZER;
     }
 
-//    explicit CacheEntry(const std::shared_ptr<std::vector<char>> &entryData) {
-//        data = entryData;
-//    }
-
     ~CacheEntry() override {
         pthread_mutex_destroy(&mutex);
         pthread_cond_destroy(&conditionVar);

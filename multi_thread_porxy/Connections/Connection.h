@@ -1,6 +1,7 @@
 #ifndef SINGLE_THREAD_PORXY_CONNECTION_H
 #define SINGLE_THREAD_PORXY_CONNECTION_H
 
+#include <utility>
 #include <vector>
 #include <string>
 #include <memory>
@@ -24,12 +25,16 @@ public:
         return this->connectionSocketFd == other.connectionSocketFd;
     }
 
-    void setBuffer(const Buffer& sourceBuffer) {
-        *buffer = sourceBuffer;
+    void setBuffer(std::shared_ptr<Buffer> sourceBuffer) {
+        buffer = std::move(sourceBuffer);
     }
 
     const std::shared_ptr<Buffer>& getBuffer() const {
         return buffer;
+    }
+
+    const std::string& getRequestUrl() const {
+        return requestUrl;
     }
 
 protected:
