@@ -25,10 +25,10 @@ public:
     }
 
     void setBuffer(const Buffer& sourceBuffer) {
-        this->buffer = sourceBuffer;
+        *buffer = sourceBuffer;
     }
 
-    const Buffer& getBuffer() const {
+    const std::shared_ptr<Buffer>& getBuffer() const {
         return buffer;
     }
 
@@ -36,7 +36,7 @@ protected:
     int connectionSocketFd;
     std::string requestUrl;
 
-    Buffer buffer;
+    std::shared_ptr<Buffer> buffer;
 };
 
 #endif //SINGLE_THREAD_PORXY_CONNECTION_H

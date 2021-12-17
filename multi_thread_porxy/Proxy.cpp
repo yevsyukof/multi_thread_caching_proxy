@@ -33,6 +33,12 @@ Proxy::Proxy(int listeningPort) : isInterrupt(false) {
     }
 }
 
+void *Proxy::handleNewServerConnection(void *arg) {
+
+
+    pthread_exit(reinterpret_cast<void *>(EXIT_SUCCESS));
+}
+
 void Proxy::handleArrivalOfClientRequest(const std::shared_ptr<ClientConnection> &clientConnection) {
     if (clientConnection->getState() == ClientConnectionStates::WRONG_REQUEST) {
         switch (clientConnection->getError()) {
@@ -74,11 +80,15 @@ void Proxy::handleArrivalOfClientRequest(const std::shared_ptr<ClientConnection>
             }
         }
     } else {
+        pthread_t newThreadId;
+//        pthread_create(&newThreadId, nullptr, handleNewServerConnection,
+//                       new ServerConnection());
+//        pthread_detach(newThreadId);
         // TODO
     }
 }
 
-void *Proxy::handleClientConnection(void *arg) {
+void *Proxy::handleNewClientConnection(void *arg) {
     std::shared_ptr<ClientConnection> clientConnection
             = std::move(*reinterpret_cast<std::shared_ptr<ClientConnection> *>(arg));
 
@@ -100,7 +110,7 @@ void Proxy::run() {
         int acceptedSockFd = accept(listeningSocketFd, nullptr, nullptr);
 
         if (acceptedSockFd < 0) {
-            std::cout << "--------Proxy::handleClientConnection(): Error accepting connection--------" << std::endl;
+            std::cout << "--------Proxy::handleNewClientConnection(): Error accepting connection--------" << std::endl;
             continue;
         }
 
@@ -108,8 +118,7 @@ void Proxy::run() {
                   << " ~~~~~~~~~~~~~~~~" << " " << getTime() << std::endl;
 
         pthread_t newThreadId;
-
-        pthread_create(&newThreadId, nullptr, handleClientConnection,
+        pthread_create(&newThreadId, nullptr, handleNewClientConnection,
                        new ClientConnection(acceptedSockFd));
         pthread_detach(newThreadId);
     }
@@ -160,14 +169,3 @@ int Proxy::resolveRequiredHost(const std::string &host) {
     freeaddrinfo(resolvedList);
     return found_socket;
 }
-
-//void Proxy::initializeNewServerConnection(int newServerConnectionSocketFd,
-//                                          const std::string &requestUrl,
-//                                          const std::shared_ptr<std::string> &processedRequestForServer) {
-//    int inPollListIdx = addConnectionFdInPollList(newServerConnectionSocketFd, POLLOUT);
-//    serversConnections.emplace_back(std::make_shared<ServerConnection>(newServerConnectionSocketFd,
-//                                                                       inPollListIdx,
-//                                                                       requestUrl,
-//                                                                       processedRequestForServer));
-//    clientsWaitingForResponse[requestUrl]; // инициализируем множество ассоц с этим сервером клиентов
-//}

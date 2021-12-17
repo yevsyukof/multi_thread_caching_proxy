@@ -2,8 +2,10 @@
 #define SINGLE_THREAD_PORXY_SERVERCONNECTION_H
 
 #include "Connection.h"
+#include "/home/yevsyukof/CLionProjects/multi_thread_porxy/Cache/CacheEntry.h"
 
 enum class ServerConnectionState {
+    CONNECTION_ERROR,
     SENDING_REQUEST,
     RECEIVING_ANSWER,
     CACHING_ANSWER_RECEIVED,
@@ -12,31 +14,37 @@ enum class ServerConnectionState {
 
 class ServerConnection : public Connection {
 public:
-    ServerConnection(int connectionSocketFd, int inPollListIdx,
+    ServerConnection(int connectionSocketFd,
                      const std::string &requestUrl,
-                     std::shared_ptr<std::string>  processedRequestForServer);
+                     std::shared_ptr<std::string>  processedRequestForServer,
+                     std::shared_ptr<CacheEntry> answerBuffer);
 
     ServerConnectionState getState() const {
         return connectionState;
     }
 
-    void setState(const ServerConnectionState &state) {
-        connectionState = state;
+    const std::shared_ptr<CacheEntry>& getServerAnswerBuffer() const {
+        return serverAnswerBuffer;
     }
 
-//    const std::shared_ptr<std::vector<char>>& getRecvBuf() const {
-//        return recvBuf;
-//    } /// TODO
+    void sendRequest();
 
-    int sendRequest();
+    void receiveAnswer();
 
-    int receiveAnswer();
+    bool isCachingAnswerReceived() const {
+        return isResponseStatusIs200();
+    }
+
+private:
+    bool isResponseStatusIs200() const;
 
 private:
     std::shared_ptr<std::string> processedRequestForServer;
-    int sendRequestOffset;
+    long long sendRequestOffset;
 
     ServerConnectionState connectionState;
+
+    std::shared_ptr<CacheEntry> serverAnswerBuffer;
 };
 
 

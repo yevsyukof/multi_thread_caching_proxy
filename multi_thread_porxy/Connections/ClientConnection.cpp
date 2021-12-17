@@ -107,13 +107,13 @@ void ClientConnection::receiveRequest() {
 }
 
 bool ClientConnection::sendAnswer() {
-    while (buffer.haveRemainingDataFrom(sendAnswerOffset)) {
-        buffer.lock();
+    while (buffer->haveRemainingDataFrom(sendAnswerOffset)) {
+        buffer->lock();
         {
             long long sendCount;
             if ((sendCount = send(connectionSocketFd,
-                                  buffer.getData()->data() + sendAnswerOffset,
-                                  buffer.getData()->size() - sendAnswerOffset, 0)) == -1) {
+                                  buffer->getData()->data() + sendAnswerOffset,
+                                  buffer->getData()->size() - sendAnswerOffset, 0)) == -1) {
                 std::cout << "--------sendAnswer(): SEND ERROR--------" << std::endl;
 
                 connectionState = ClientConnectionStates::CONNECTION_ERROR;
@@ -122,7 +122,7 @@ bool ClientConnection::sendAnswer() {
                 sendAnswerOffset += sendCount;
             }
         }
-        buffer.unlock();
+        buffer->unlock();
     }
     std::cout << "--------sendAnswer(): CLIENT RECEIVE ANSWER--------" << std::endl;
     return true;

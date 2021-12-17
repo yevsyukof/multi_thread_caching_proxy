@@ -5,84 +5,59 @@
 
 #include "../HttpParser/httpresponseparser.h"
 
-#define RECV_BUF_SIZE 65536
+#define RECV_BUF_SIZE 32768
 
-#define NOT_FULL_SEND_REQUEST 0
-#define FULL_SEND_REQUEST 1
-#define SOCKET_SEND_ERROR -1
-
-#define NOT_FULL_RECEIVE_ANSWER NOT_FULL_SEND_REQUEST
-#define FULL_RECEIVE_ANSWER FULL_SEND_REQUEST
-#define SOCKET_RECEIVE_ERROR SOCKET_SEND_ERROR
-
-ServerConnection::ServerConnection(int connectionSocketFd, int inPollListIdx,
+ServerConnection::ServerConnection(int connectionSocketFd,
                                    const std::string &requestUrl,
-                                   std::shared_ptr<std::string> processedRequestForServer)
+                                   std::shared_ptr<std::string> processedRequestForServer,
+                                   std::shared_ptr<CacheEntry> answerBuffer)
         : Connection(connectionSocketFd),
           processedRequestForServer(std::move(processedRequestForServer)),
-          sendRequestOffset(0), connectionState(ServerConnectionState::SENDING_REQUEST) {
+          sendRequestOffset(0),
+          connectionState(ServerConnectionState::SENDING_REQUEST) {
+    this->serverAnswerBuffer = std::move(answerBuffer);
     this->requestUrl = requestUrl;
 }
 
-int ServerConnection::sendRequest() {
-    std::cout << "ServerConnection::sendRequest(): iteration" << std::endl;
+void ServerConnection::sendRequest() {
+    bool isAllSent = false;
+    while (!isAllSent) {
+        int sendCount;
+        if ((sendCount = send(connectionSocketFd,
+                              processedRequestForServer->c_str() + sendRequestOffset,
+                              processedRequestForServer->size() - sendRequestOffset, 0)) == -1) {
 
-    int sendCount;
-    if ((sendCount = send(connectionSocketFd,
-                          processedRequestForServer->c_str() + sendRequestOffset,
-                          processedRequestForServer->size() - sendRequestOffset, 0)) == -1) {
-        std::cout << "\n----------------SERVER SEND REQUEST ERROR----------------\n" << std::endl;
-        return SOCKET_SEND_ERROR;
-    } else {
-        sendRequestOffset += sendCount;
-        if (sendRequestOffset == processedRequestForServer->length()) {
-            connectionState = ServerConnectionState::RECEIVING_ANSWER;
-
-            std::cout << "ServerConnection::sendRequest(): done" << std::endl;
-
-            return FULL_SEND_REQUEST;
+            std::cout << "\n----------------SERVER SEND REQUEST ERROR----------------\n" << std::endl;
+            connectionState = ServerConnectionState::CONNECTION_ERROR;
+            isAllSent = true;
         } else {
-            connectionState = ServerConnectionState::SENDING_REQUEST;
-            return NOT_FULL_SEND_REQUEST;
+            sendRequestOffset += sendCount;
+            if (sendRequestOffset == processedRequestForServer->length()) {
+                connectionState = ServerConnectionState::RECEIVING_ANSWER;
+                isAllSent = true;
+            } else {
+                connectionState = ServerConnectionState::SENDING_REQUEST;
+            }
         }
     }
 }
 
-bool isResponseStatusIs200(const std::shared_ptr<std::vector<char>> &recvBuf) { // TODO
+bool ServerConnection::isResponseStatusIs200() const {
     httpparser::HttpResponseParser httpResponseParser;
     httpparser::Response parsedResponse;
 
     httpparser::HttpResponseParser::ParseResult parseResult = httpResponseParser
-            .parse(parsedResponse, recvBuf->data(), recvBuf->data() + recvBuf->size());
+            .parse(parsedResponse,
+                   serverAnswerBuffer->getData()->data(),
+                   serverAnswerBuffer->getData()->data() + serverAnswerBuffer->getData()->size());
 
     return parseResult != httpparser::HttpResponseParser::ParsingError && parsedResponse.statusCode == 200;
 }
 
-int ServerConnection::receiveAnswer() {
-    return 1;
-//    std::cout << "ServerConnection::receiveAnswer(): iteration" << std::endl;
-//
-//    static char buf[RECV_BUF_SIZE]; // проблема при многопоточности
-//    ssize_t recvCount;
-//
-//    if ((recvCount = recv(connectionSocketFd, buf, RECV_BUF_SIZE, 0)) < 0) {
-//        std::cout << "\n----------------RECEIVE FROM SERVER SOCKET ERROR----------------\n" << std::endl;
-//        return SOCKET_RECEIVE_ERROR;
-//    } else if (recvCount > 0) {
-//        std::cout << "recvCount = " << recvCount << std::endl;
-//
-//        std::cout << "ServerConnection::receiveAnswer(): recv() unblock" << std::endl;
-//
-//        recvBuf->insert(recvBuf->end(), buf, buf + recvCount);
-//        connectionState = ServerConnectionState::RECEIVING_ANSWER;
-//        return NOT_FULL_RECEIVE_ANSWER;
-//    } else {
-//        std::cout << "recvCount = " << recvCount << std::endl;
-//        if (isResponseStatusIs200(recvBuf)) {
-//            connectionState = ServerConnectionState::CACHING_ANSWER_RECEIVED;
-//        } else {
-//            connectionState = ServerConnectionState::NOT_CACHING_ANSWER_RECEIVED;
-//        }
-//        return FULL_RECEIVE_ANSWER;
-//    }
+void ServerConnection::receiveAnswer() {
+    serverAnswerBuffer->lock();
+    {
+
+    }
+    serverAnswerBuffer->unlock();
 }

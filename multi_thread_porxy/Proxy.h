@@ -32,7 +32,9 @@ public:
     void shutdown();
 
 private:
-    static void* handleClientConnection(void *arg);
+    static void* handleNewClientConnection(void *arg);
+
+    static void* handleNewServerConnection(void *arg);
 
     static void handleArrivalOfClientRequest(const std::shared_ptr<ClientConnection> &clientConnection);
 
