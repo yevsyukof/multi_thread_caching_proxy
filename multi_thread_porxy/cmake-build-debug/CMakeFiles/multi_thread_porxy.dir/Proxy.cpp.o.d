@@ -208,7 +208,7 @@ CMakeFiles/multi_thread_porxy.dir/Proxy.cpp.o: \
  /usr/include/c++/11.1.0/pstl/glue_memory_defs.h \
  /usr/include/c++/11.1.0/pstl/execution_defs.h \
  /home/yevsyukof/CLionProjects/multi_thread_porxy/Constants.h \
- /home/yevsyukof/CLionProjects/multi_thread_porxy/Cache/Cache.h \
+ /home/yevsyukof/CLionProjects/multi_thread_porxy/Cache/CacheStorage.h \
  /home/yevsyukof/CLionProjects/multi_thread_porxy/Cache/CacheEntry.h \
  /home/yevsyukof/CLionProjects/multi_thread_porxy/Cache/Buffer.h \
  /home/yevsyukof/CLionProjects/multi_thread_porxy/Connections/ClientConnection.h \

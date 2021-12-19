@@ -188,10 +188,17 @@ void Proxy::run() {
                   << " ~~~~~~~~~~~~~~~~" << " " << getTime() << std::endl;
 
         pthread_t newThreadId;
-        pthread_create(&newThreadId, nullptr, handleNewClientConnection,
-                       new ClientConnection(acceptedSockFd));
         // хэндлу передается указатель на адрес new CC в куче
-        pthread_detach(newThreadId);
+        if (pthread_create(&newThreadId, nullptr, handleNewClientConnection,
+                       new ClientConnection(acceptedSockFd)) != 0) {
+            std::cerr << "-----------------can't create new thread" << std::endl;
+            close(acceptedSockFd);
+            continue;
+        }
+        if (pthread_detach(newThreadId) != 0) {
+            std::cerr << "-----------------can't detach new thread" << std::endl;
+            close(acceptedSockFd);
+        }
     }
 }
 

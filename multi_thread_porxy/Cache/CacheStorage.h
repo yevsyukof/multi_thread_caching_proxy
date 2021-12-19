@@ -7,14 +7,16 @@
 #include <utility>
 #include "CacheEntry.h"
 
+#define SIZE_LIMIT 104'857'600 // 100 MB
 
-class Cache {
+class CacheStorage {
 public:
-    Cache() {
+    CacheStorage() {
         mutex = PTHREAD_MUTEX_INITIALIZER;
+        size = 0;
     }
 
-    ~Cache() {
+    ~CacheStorage() {
         pthread_mutex_destroy(&mutex);
     }
 
@@ -32,7 +34,12 @@ public:
 
     void addCacheEntry(const std::string &url,
                        const std::shared_ptr<CacheEntry>& entry) {
-        urlToCacheEntry[url] = entry;
+        if (size <= SIZE_LIMIT) {
+            size += entry->getData()->size();
+            urlToCacheEntry[url] = entry;
+        } else {
+            std::cout << "Cache storage is full: can't add new entry by url: " << url << std::endl;
+        }
     }
 
     const std::shared_ptr<CacheEntry>& getCacheEntry(const std::string &url) const {
@@ -40,6 +47,8 @@ public:
     }
 
 private:
+    unsigned long long size;
+
     pthread_mutex_t mutex {};
 
     std::map<std::string, std::shared_ptr<CacheEntry>> urlToCacheEntry;

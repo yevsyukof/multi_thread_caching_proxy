@@ -111,6 +111,7 @@ bool ClientConnection::sendAnswer() {
         buffer->lock();
         {
             long long sendCount;
+            // TODO вылетает с SIGPIPE иногда
             if ((sendCount = send(connectionSocketFd,
                                   buffer->getData()->data() + sendAnswerOffset,
                                   buffer->getData()->size() - sendAnswerOffset, 0)) == -1) {

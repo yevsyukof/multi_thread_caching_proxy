@@ -149,8 +149,6 @@ CMakeFiles/multi_thread_porxy.dir/main.cpp.o: \
  /usr/include/sys/ucontext.h /usr/include/bits/sigstack.h \
  /usr/include/bits/ss_flags.h /usr/include/bits/types/struct_sigstack.h \
  /usr/include/bits/sigthread.h /usr/include/bits/signal_ext.h \
- /usr/include/memory.h /usr/include/string.h /usr/include/strings.h \
- /usr/include/sys/poll.h /usr/include/bits/poll.h \
  /home/yevsyukof/CLionProjects/multi_thread_porxy/Proxy.h \
  /usr/include/c++/11.1.0/map /usr/include/c++/11.1.0/bits/stl_tree.h \
  /usr/include/c++/11.1.0/ext/aligned_buffer.h \
@@ -217,7 +215,7 @@ CMakeFiles/multi_thread_porxy.dir/main.cpp.o: \
  /usr/include/asm-generic/sockios.h \
  /usr/include/bits/types/struct_osockaddr.h \
  /home/yevsyukof/CLionProjects/multi_thread_porxy/Constants.h \
- /home/yevsyukof/CLionProjects/multi_thread_porxy/Cache/Cache.h \
+ /home/yevsyukof/CLionProjects/multi_thread_porxy/Cache/CacheStorage.h \
  /home/yevsyukof/CLionProjects/multi_thread_porxy/Cache/CacheEntry.h \
  /home/yevsyukof/CLionProjects/multi_thread_porxy/Cache/Buffer.h \
  /home/yevsyukof/CLionProjects/multi_thread_porxy/Connections/ClientConnection.h \
@@ -235,7 +233,8 @@ CMakeFiles/multi_thread_porxy.dir/main.cpp.o: \
  /usr/include/c++/11.1.0/bits/hashtable.h \
  /usr/include/c++/11.1.0/bits/hashtable_policy.h \
  /usr/include/c++/11.1.0/bits/unordered_map.h \
- /usr/include/c++/11.1.0/cstring \
+ /usr/include/c++/11.1.0/cstring /usr/include/string.h \
+ /usr/include/strings.h \
  /home/yevsyukof/CLionProjects/multi_thread_porxy/Connections/../HttpParser/request.h \
  /usr/include/c++/11.1.0/sstream /usr/include/c++/11.1.0/bits/sstream.tcc \
  /home/yevsyukof/CLionProjects/multi_thread_porxy/Connections/../HttpParser/request.h \

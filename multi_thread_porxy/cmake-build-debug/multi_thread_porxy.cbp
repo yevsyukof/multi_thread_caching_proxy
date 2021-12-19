@@ -85,10 +85,10 @@
 		<Unit filename="/home/yevsyukof/CLionProjects/multi_thread_porxy/Cache/Buffer.h">
 			<Option target="multi_thread_porxy"/>
 		</Unit>
-		<Unit filename="/home/yevsyukof/CLionProjects/multi_thread_porxy/Cache/Cache.h">
+		<Unit filename="/home/yevsyukof/CLionProjects/multi_thread_porxy/Cache/CacheEntry.h">
 			<Option target="multi_thread_porxy"/>
 		</Unit>
-		<Unit filename="/home/yevsyukof/CLionProjects/multi_thread_porxy/Cache/CacheEntry.h">
+		<Unit filename="/home/yevsyukof/CLionProjects/multi_thread_porxy/Cache/CacheStorage.h">
 			<Option target="multi_thread_porxy"/>
 		</Unit>
 		<Unit filename="/home/yevsyukof/CLionProjects/multi_thread_porxy/Connections/ClientConnection.cpp">

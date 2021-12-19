@@ -9,7 +9,7 @@
 #include <vector>
 #include <sys/socket.h>
 #include "Constants.h"
-#include "Cache/Cache.h"
+#include "Cache/CacheStorage.h"
 #include "Connections/ClientConnection.h"
 #include "Connections/ServerConnection.h"
 #include "utils/WaitersMap.h"
@@ -17,7 +17,7 @@
 
 static WaitersMap activeServersConnections;
 
-static Cache cacheStorage;
+static CacheStorage cacheStorage;
 
 class Proxy {
 public:
